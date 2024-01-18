@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sammy Test !!! Quiz App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .quiz-container {
+      max-width: 600px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .question {
+      margin-bottom: 10px;
+    }
+    .options label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .btn {
+      cursor: pointer;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <div class="header">Sammy Test !!! Quiz App</div>
+  <div id="question" class="question"></div>
+  <div id="options" class="options"></div>
+  <button onclick="previousQuestion()" class="btn" id="prevBtn" disabled>Previous</button>
+  <button onclick="nextQuestion()" class="btn" id="nextBtn">Next</button>
+  <button onclick="submitQuiz()" class="btn" id="submitBtn" style="display: none;">Submit</button>
+</div>
+
+<script>
+  const questions = [
+    {
+      question: "What is the capital of France?",
+      options: ["Berlin", "Madrid", "Paris", "Rome"],
+      correctAnswer: "Paris"
+    },
+    {
+      question: 'Which planet is known as the Red Planet?',
+      options: ["Venus","Mars","Jupiter","Saturn"],
+      correctAnswer: "Mars"
+    },
+    {
+      question: 'What is the largest mammal?',
+      options: ["Elephant","Whale Shark","Blue Whale","Giraffe"],
+      correctAnswer: "Blue Whale"
+    },
+    {
+      question: 'In which year did the Titanic sink?',
+      options: ["1905","1912","1920","S1931"],
+      correctAnswer:"1912"
+    },
+    {
+      question: 'What is the currency of Japan?',
+      options: ["Yuan","Won","Yen","Ringgit"],
+      correctAnswer: "Yen"
+    },
+    {
+      question: 'Which programming language is known as the "language of the web"?',
+      options: ["Java","Python","Javascript","C++"],
+      correctAnswer: "Javascript"
+    },
+    {
+      question: 'What is the largest ocean on Earth?',
+      options: ["Atlantic Ocean","Idian Ocean","Southern Ocean","Pacific Ocean"],
+      correctAnswer: "Pacific Ocean"
+    },
+    {
+      question: 'Who wrote "Romeo and Juliet"?',
+      options: ["Charles Dickens","Jane Austen","Williams Shakespeare","Mark Twain"],
+      correctAnswer: "Williams Shakespeare"
+    },
+    {
+      question: 'What is the capital of Australia?',
+      options: ["Sydney","Melbourne","Canberra","Brisbane"],
+      correctAnswer: "Canberra"
+    },
+    {
+      question: 'Which gas do plants absorb from the atmosphere?',
+      options: ["Oxygen","Nitrogen","Carbondioxide","Helium"],
+      correctAnswer: "Carbondioxide"
+    },
+    {
+      question: 'Who is the father of C language?',
+      options: ["Dennis Ritchie","Charles Barbagge","Michael Faraday","Isaac Newton"],
+      correctAnswer: "Dennis Ritchie"
+    },
+    {
+      question: 'Another name for program is ?',
+      options: ["Journal","Code","Software","Hardware"],
+      correctAnswer: "Software"
+    },
+    // Add more questions...
+
+    // Example question with 50 questions...
+  ];
+
+  let currentQuestion = 0;
+  let userAnswers = [];
+
+  function showQuestion() {
+    const questionElement = document.getElementById("question");
+    const optionsElement = document.getElementById("options");
+    const current = questions[currentQuestion];
+
+    questionElement.textContent = current.question;
+
+    optionsElement.innerHTML = "";
+    current.options.forEach((option, index) => {
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = "option";
+      input.value = option;
+      input.id = `option${index + 1}`;
+      input.addEventListener("change", () => {
+        userAnswers[currentQuestion] = option;
+      });
+
+      const label = document.createElement("label");
+      label.textContent = option;
+      label.setAttribute("for", `option${index + 1}`);
+
+      optionsElement.appendChild(input);
+      optionsElement.appendChild(label);
+    });
+
+    document.getElementById("prevBtn").disabled = currentQuestion === 0;
+    document.getElementById("nextBtn").textContent = currentQuestion === questions.length - 1 ? "Submit" : "Next";
+    document.getElementById("submitBtn").style.display = currentQuestion === questions.length - 1 ? "block" : "none";
+  }
+
+  function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      showQuestion();
+    }
+  }
+
+  function previousQuestion() {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      showQuestion();
+    }
+  }
+
+  function submitQuiz() {
+    const score = calculateScore();
+    displayScore(score);
+    document.getElementById("submitBtn").disabled = true;
+  }
+
+  function calculateScore() {
+    let score = 0;
+    for (let i = 0; i < questions.length; i++) {
+      if (userAnswers[i] === questions[i].correctAnswer) {
+        score++;
+      }
+    }
+    return score;
+  }
+
+  function displayScore(score) {
+    const scoreElement = document.getElementById("question");
+    scoreElement.innerHTML = `Your score: ${score} out of ${questions.length}`;
+  }
+
+  showQuestion();
+</script>
+
+</body>
+</html>
