@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sammy Test !!! Quiz App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .quiz-container {
+      max-width: 600px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .question {
+      margin-bottom: 10px;
+    }
+    .options label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .btn {
+      cursor: pointer;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+    .timer {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <div class="header">Sammy Test !!! Quiz App</div>
+  <div id="intro">
+    <label for="userName">Enter your name:</label>
+    <input type="text" id="userName" placeholder="Your Name">
+    <button onclick="startQuiz()" class="btn">Start Quiz</button>
+  </div>
+  <div id="quiz" style="display: none;">
+    <div id="questionInfo"></div>
+    <div id="question" class="question"></div>
+    <div id="options" class="options"></div>
+    <div id="timer" class="timer">Time Left: <span id="time">60</span> seconds</div>
+    <button onclick="previousQuestion()" class="btn" id="prevBtn" disabled>Previous</button>
+    <button onclick="nextQuestion()" class="btn" id="nextBtn">Next</button>
+    <div id="submitContainer" style="display: none;">
+      <button onclick="submitQuiz()" class="btn" id="submitBtn">Submit</button>
+    </div>
+  </div>
+  <div id="result" style="display: none;">
+    <div id="score"></div>
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      question: 'How do you comment a single line in Python??',
+      options: ["//comment","/* comment */","*comment","# comment"],
+      correctAnswer: "# comment"
+    },
+    {
+      question: 'How do you define a function in Python?',
+      options: ["def","Var","try","get"],
+      correctAnswer: "def"
+    },
+    {
+      question: 'How do you declare a variable in Python?',
+      options: ["var x","x = variable","x = 5","declare x"],
+      correctAnswer:"x = 5"
+    },
+    {
+      question: 'How do you print "Hello, World!" in Python?',
+      options: ["print('Hello, World!')","display('Hello, World!')","printf('Hello, World!')"," echo('Hello, World!')"],
+      correctAnswer: "print('Hello, World!')"
+    },
+    {
+      question: 'Which programming language is known as the "language of the web"?',
+      options: ["Java","Python","Javascript","C++"],
+      correctAnswer: "Javascript"
+    },
+    {
+      question: 'What is the purpose of the "if" statement in Python?',
+      options: ["To define a function","To loop through elements"," To make decisions based on conditions","To create a class"],
+      correctAnswer: "To make decisions based on conditions"
+    },
+    {
+      question: 'What does the "for" loop iterate over in Python',
+      options: ["Elements of a list","Characters in a string","Items in a dictionary","All of the above"],
+      correctAnswer: "All of the above"
+    },
+    {
+      question: 'How do you remove an item from a list in Python?',
+      options: [" list.remove(item)","list.discard(item)"," list.delete(item)","list.pop(item)"],
+      correctAnswer: "list.remove(item)"
+    },
+    {
+      question: 'How do you check the length of a list in Python?',
+      options: ["len(myList)"," length(myList)","size(myList)","count(myList)"],
+      correctAnswer: " len(myList)"
+    },
+    {
+      question: 'Who is the father of C language?',
+      options: ["Dennis Ritchie","Charles Barbagge","Michael Faraday","Isaac Newton"],
+      correctAnswer: "Dennis Ritchie"
+    },
+    {
+      question: 'Another name for program is ?',
+      options: ["Journal","Code","Software","Hardware"],
+      correctAnswer: "Software"
+    },
+    {
+      question: 'Which function is used to print characters to the console in C?',
+      options: ["print()","console.log()","printf()","display()"],
+      correctAnswer: "printf()"
+    },
+    {
+      question: 'How do you comment a single-line in C?',
+      options: ["// comment","/* comment */"," -- comment"," ' comment '"],
+      correctAnswer: "Software"
+    },
+    {
+      question: 'What does the "sizeof" operator return in C?',
+      options: ["Size of a variable","Size of a function","Size of a pointer"," Size of a class"],
+      correctAnswer: "Size of a variable"
+    },
+    {
+      question: 'What is the purpose of the "break" statement in a switch statement?',
+      options: ["To exit the loop"," To skip the current iteration","To terminate the switch statement","To continue to the next case"],
+      correctAnswer: "To terminate the switch statement"
+    },
+    {
+      question: 'What is the default return type of a function in C when it is not specified?',
+      options: ["int","void","char","double"],
+      correctAnswer: "int"
+    }, 
+    {
+      question: "What is the purpose of the 'else' statement in Python?",
+      options: ["To define a variable", "To handle exceptions", "To create a loop", "To specify an alternative action when the 'if' condition is false"],
+      correctAnswer: "To specify an alternative action when the 'if' condition is false"
+    },
+    {
+      question: "Which data type is used to store a sequence of characters in Python?",
+      options: ["int", "float", "char", "str"],
+      correctAnswer: "str"
+    },
+    {
+      question: "What is the result of the expression 3 * 4 / 2 in Python?",
+      options: ["6", "7", "12", "14"],
+      correctAnswer: "6"
+    },
+
+    {
+      question: "What does the acronym 'HTML' stand for?",
+      options: ["Hyper Text Markup Language", "High-level Text Management Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language"],
+      correctAnswer: "Hyper Text Markup Language"
+    },
+    // Add more questions...
+    // ... Your questions array ...
+  ];
+
+  let currentQuestion = 0;
+  let userAnswers = [];
+  let timeLeft = 60;
+  let timerInterval;
+  let userName;
+
+  function startQuiz() {
+    userName = document.getElementById("userName").value;
+    if (!userName) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+
+    showQuestion();
+    startTimer();
+  }
+
+  function showQuestion() {
+    const questionElement = document.getElementById("question");
+    const optionsElement = document.getElementById("options");
+    const questionInfoElement = document.getElementById("questionInfo");
+    const submitContainer = document.getElementById("submitContainer");
+    const current = questions[currentQuestion];
+
+    questionInfoElement.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+    questionElement.textContent = current.question;
+
+    optionsElement.innerHTML = "";
+    current.options.forEach((option, index) => {
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = "option";
+      input.value = option;
+      input.id = `option${index + 1}`;
+      input.addEventListener("change", () => {
+        userAnswers[currentQuestion] = option;
+      });
+
+      const label = document.createElement("label");
+      label.textContent = option;
+      label.setAttribute("for", `option${index + 1}`);
+
+      optionsElement.appendChild(input);
+      optionsElement.appendChild(label);
+    });
+
+    document.getElementById("prevBtn").disabled = currentQuestion === 0;
+    document.getElementById("nextBtn").textContent = currentQuestion === questions.length - 1 ? "Submit" : "Next";
+    submitContainer.style.display = currentQuestion === questions.length - 1 ? "block" : "none";
+
+    // Hide the "Next" button after the last question
+    document.getElementById("nextBtn").style.display = currentQuestion === questions.length - 1 ? "none" : "block";
+  }
+
+  function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      showQuestion();
+    }
+  }
+
+  function previousQuestion() {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      showQuestion();
+    }
+  }
+
+  function startTimer() {
+    timerInterval = setInterval(function () {
+      timeLeft--;
+      document.getElementById("time").textContent = timeLeft;
+
+      if (timeLeft === 0) {
+        clearInterval(timerInterval);
+        submitQuiz();
+      }
+    }, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+  }
+
+  function submitQuiz() {
+    stopTimer();
+    const score = calculateScore();
+    displayScore(score);
+
+    // Hide quiz elements after submitting
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("result").style.display = "block";
+  }
+
+  function calculateScore() {
+    let score = 0;
+    for (let i = 0; i < questions.length; i++) {
+      if (userAnswers[i] === questions[i].correctAnswer) {
+        score++;
+      }
+    }
+    return score;
+  }
+
+  function displayScore(score) {
+    const scoreElement = document.getElementById("score");
+    scoreElement.innerHTML = `<p>Dear ${userName}, your score is: ${score} out of ${questions.length}</p>`;
+  }
+</script>
+
+</body>
+</html>
